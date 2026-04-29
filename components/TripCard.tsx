@@ -11,7 +11,7 @@ export default function TripCard({ trip }: any) {
   return (
     <Link href={`/trip/${trip.id}`}>
 
-      <div className="bg-white rounded-xl border shadow-sm hover:shadow-md transition w-full max-w-[520px]">
+      <div className="bg-white rounded-xl border shadow-sm hover:shadow-md transition w-full">
 
         {/* MOBILE FIRST DESIGN */}
         <div className="flex gap-3 p-3">

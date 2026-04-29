@@ -84,7 +84,8 @@ export default function SearchPage() {
         </div>
 
         {/* RESULTS */}
-        <div className="flex-1 space-y-4 flex flex-col items-center">
+        <div className="flex-1 space-y-4">
+
 
           {filtered.length === 0 && (
             <p className="text-gray-500">No trips found</p>
