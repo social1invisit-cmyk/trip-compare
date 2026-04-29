@@ -50,7 +50,6 @@ export default async function TripDetail({
         {/* LEFT */}
         <div className="flex-1 space-y-5">
 
-          {/* ABOUT */}
           <div className="bg-white p-5 rounded-2xl shadow border">
             <h2 className="font-semibold mb-2 text-lg">About Trip</h2>
             <p className="text-gray-600 text-sm">
@@ -58,22 +57,17 @@ export default async function TripDetail({
             </p>
           </div>
 
-          {/* DETAILS */}
           <div className="bg-white p-5 rounded-2xl shadow border">
             <h2 className="font-semibold mb-3 text-lg">Trip Details</h2>
 
             <div className="grid grid-cols-2 gap-4 text-sm">
-
               <p><span className="font-medium">Location:</span> {trip.location}</p>
               <p><span className="font-medium">Duration:</span> {trip.duration}</p>
-
               <p><span className="font-medium">Category:</span> {trip.category?.join(", ")}</p>
               <p><span className="font-medium">Group Size:</span> 10-20</p>
-
             </div>
           </div>
 
-          {/* HIGHLIGHTS */}
           <div className="bg-white p-5 rounded-2xl shadow border">
             <h2 className="font-semibold mb-2 text-lg">Highlights</h2>
 
@@ -102,13 +96,15 @@ export default async function TripDetail({
               ⭐ 4.5
             </div>
 
-            <button className="w-full mt-5 bg-blue-600 text-white py-3 rounded-xl text-sm font-semibold shadow hover:bg-blue-700 transition">
+            {/* ✅ REAL REDIRECT BUTTON */}
+            <a
+              href={trip.bookingLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full mt-5 bg-blue-600 text-white py-3 rounded-xl text-sm font-semibold shadow hover:bg-blue-700 transition text-center"
+            >
               Book Now
-            </button>
-
-            <button className="w-full mt-3 border py-3 rounded-xl text-sm hover:bg-gray-50 transition">
-              Add to Compare
-            </button>
+            </a>
 
           </div>
 
