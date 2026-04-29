@@ -10,12 +10,14 @@ export default function TripCard({ trip }: any) {
 
   return (
     <Link href={`/trip/${trip.id}`}>
-      <div className="bg-white rounded-xl shadow border overflow-hidden">
 
-        {/* MOBILE */}
-        <div className="flex p-3 gap-3 md:hidden">
+      <div className="bg-white rounded-xl border shadow-sm hover:shadow-md transition w-full max-w-[520px]">
 
-          <div className="relative w-[110px] h-[110px] rounded-lg overflow-hidden">
+        {/* MOBILE FIRST DESIGN */}
+        <div className="flex gap-3 p-3">
+
+          {/* IMAGE */}
+          <div className="relative w-[110px] h-[110px] rounded-lg overflow-hidden flex-shrink-0">
             <Image
               src={trip.image}
               alt={trip.name}
@@ -25,15 +27,25 @@ export default function TripCard({ trip }: any) {
             />
           </div>
 
+          {/* CONTENT */}
           <div className="flex-1">
-            <h2 className="text-sm font-semibold">{trip.name}</h2>
 
+            {/* TITLE */}
+            <h2 className="text-sm font-semibold leading-tight">
+              {trip.name}
+            </h2>
+
+            {/* SUBTEXT */}
             <p className="text-xs text-gray-500 mt-1">
               {trip.duration} • {trip.location}
             </p>
 
-            <div className="text-xs mt-1">⭐ 4.5</div>
+            {/* RATING */}
+            <div className="flex items-center text-xs mt-1">
+              ⭐ 4.5
+            </div>
 
+            {/* TAGS */}
             <div className="flex gap-1 mt-2 flex-wrap">
               {(trip.category || []).slice(0, 2).map((c: string) => (
                 <span
@@ -45,7 +57,9 @@ export default function TripCard({ trip }: any) {
               ))}
             </div>
 
-            <div className="flex justify-between mt-3">
+            {/* PRICE + CTA */}
+            <div className="flex justify-between items-center mt-3">
+
               <div>
                 <p className="text-[10px] text-gray-400">Starting</p>
                 <p className="text-sm font-bold text-orange-500">
@@ -53,66 +67,17 @@ export default function TripCard({ trip }: any) {
                 </p>
               </div>
 
-              <span className="text-xs text-orange-500 font-medium">
+              <button className="text-xs text-orange-500 font-semibold">
                 View →
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* DESKTOP */}
-        <div className="hidden md:flex p-4 gap-4">
-
-          <div className="relative w-[220px] h-[150px] rounded-lg overflow-hidden">
-            <Image
-              src={trip.image}
-              alt={trip.name}
-              fill
-              sizes="220px"
-              className="object-cover"
-            />
-          </div>
-
-          <div className="flex-1 flex flex-col justify-between">
-
-            <div>
-              <h2 className="text-lg font-semibold">{trip.name}</h2>
-
-              <p className="text-sm text-gray-500">
-                {trip.location} • {trip.duration}
-              </p>
-
-              <div className="mt-2">⭐ 4.5</div>
-
-              <div className="flex gap-2 mt-2 flex-wrap">
-                {(trip.category || []).map((c: string) => (
-                  <span
-                    key={c}
-                    className="text-xs bg-gray-100 px-2 py-1 rounded-full"
-                  >
-                    {c}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <div className="flex justify-between items-center mt-4">
-              <div>
-                <p className="text-xs text-gray-400">Starting from</p>
-                <p className="text-xl font-bold text-orange-500">
-                  ₹{cheapest}
-                </p>
-              </div>
-
-              <button className="bg-black text-white px-4 py-2 rounded-lg text-sm">
-                View Details →
               </button>
-            </div>
-          </div>
 
+            </div>
+
+          </div>
         </div>
 
       </div>
+
     </Link>
   );
 }
