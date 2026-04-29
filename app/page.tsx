@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -16,93 +15,98 @@ export default function Home() {
       .catch(() => setTrips([]));
   }, []);
 
-  const categories = ["Party", "Beach"];
+  const categories = ["Party", "Dating", "Women", "Biking"];
 
   return (
     <main className="min-h-screen bg-[#f5f5f5] text-black">
 
-      {/* HEADER */}
-      <div className="flex justify-between items-center px-6 py-4">
+      {/* TOP BAR */}
+      <div className="flex justify-between items-center px-4 py-3">
         <div className="text-sm">📍 India</div>
-
-        <div className="font-bold text-lg">
-          TRIP<span className="text-orange-500">COMPARE</span>
-        </div>
-
-        <div>🔔</div>
+        <div className="font-semibold">OLL <span className="text-orange-500">EXPLORE</span></div>
+        <div className="flex gap-2">🔔 📍</div>
       </div>
 
       {/* HERO */}
-      <div className="px-6 mt-6">
-        <h1 className="text-6xl font-extrabold">FIND</h1>
-
-        <p className="text-orange-500 text-2xl mt-2">
-          YOUR TYPE OF TRIP
-        </p>
+      <div className="px-4 mt-4">
+        <h1 className="text-5xl font-extrabold leading-none">FIND</h1>
+        <p className="text-orange-500 text-lg mt-1">YOUR TYPE OF TRIP</p>
 
         <input
-          placeholder="Search destination or category..."
+          placeholder="Search Destination, Trip Type or Operator"
           onKeyDown={(e) => {
             if (e.key === "Enter" && e.currentTarget.value.trim()) {
-              router.push(`/search?q=${encodeURIComponent(e.currentTarget.value)}`);
+              router.push(`/search?q=${e.currentTarget.value}`);
             }
           }}
-          className="mt-6 w-full p-4 rounded-full border"
+          className="mt-4 w-full p-3 rounded-full border bg-white"
         />
       </div>
 
-      {/* CATEGORY CHIPS */}
-      <div className="px-6 mt-6 flex gap-2">
-        {["Women", "LGBTQ", "Corporate", "Friends"].map((c) => (
-          <button
-            key={c}
-            onClick={() => router.push(`/search?q=${c}`)}
-            className="px-4 py-2 bg-white border rounded-full"
-          >
-            {c}
-          </button>
-        ))}
+      {/* GROUP CATEGORIES */}
+      <div className="px-4 mt-6">
+        <div className="flex justify-between">
+          <h2 className="font-semibold">Group Trip Categories</h2>
+          <button className="text-sm">See all</button>
+        </div>
+
+        <div className="flex gap-3 mt-3 overflow-x-auto">
+          {["Party", "Women Only", "Dating", "LGBTQ"].map((c) => (
+            <div
+              key={c}
+              onClick={() => router.push(`/search?q=${c}`)}
+              className="min-w-[80px] h-[80px] bg-white border rounded-xl flex items-center justify-center text-xs cursor-pointer"
+            >
+              {c}
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* SECTIONS */}
+      {/* BANNER */}
+      <div className="px-4 mt-6">
+        <div className="h-[120px] bg-pink-200 rounded-xl flex items-center justify-center">
+          <p className="font-bold">NIGHT CARNIVAL</p>
+        </div>
+      </div>
+
+      {/* TRIP SECTIONS */}
       {categories.map((cat) => {
         const filtered = trips.filter((t) =>
           (t.category || []).includes(cat)
         );
 
         return (
-          <div key={cat} className="px-6 mt-10">
+          <div key={cat} className="px-4 mt-6">
 
             <div className="flex justify-between">
               <h2 className="font-semibold">{cat} Trips</h2>
-
               <button
                 onClick={() => router.push(`/search?q=${cat}`)}
-                className="text-orange-500"
+                className="text-sm"
               >
-                See all →
+                See all
               </button>
             </div>
 
-            <div className="flex gap-4 mt-4 overflow-x-auto">
+            <div className="flex gap-3 mt-3 overflow-x-auto">
               {filtered.map((trip) => (
-                <Link key={trip.id} href={`/trip/${trip.id}`}>
-                  <div className="relative w-[160px] h-[200px] rounded-xl overflow-hidden">
-
+                <div
+                  key={trip.id}
+                  onClick={() => router.push(`/trip/${trip.id}`)}
+                  className="min-w-[120px] cursor-pointer"
+                >
+                  <div className="relative w-[120px] h-[120px] rounded-xl overflow-hidden">
                     <Image
                       src={trip.image}
                       alt={trip.name}
                       fill
-                      sizes="200px"
                       className="object-cover"
                     />
-
-                    <div className="absolute bottom-2 left-2 text-white text-sm">
-                      {trip.name}
-                    </div>
-
                   </div>
-                </Link>
+
+                  <p className="text-xs mt-1 text-center">{trip.name}</p>
+                </div>
               ))}
             </div>
 
