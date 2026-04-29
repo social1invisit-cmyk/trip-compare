@@ -1,8 +1,14 @@
 import { trips } from "@/data/trips";
 import Image from "next/image";
 
-export default function TripDetail({ params }: { params: { id: string } }) {
-  const trip = trips.find((t) => t.id === params.id);
+export default async function TripDetail({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+
+  const trip = trips.find((t) => t.id === id);
 
   if (!trip) {
     return <div className="p-6">Trip not found</div>;
