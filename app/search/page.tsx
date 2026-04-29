@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function SearchPage() {
   const searchParams = useSearchParams();
@@ -37,73 +37,133 @@ export default function SearchPage() {
   });
 
   return (
-    <div className="p-6 bg-white min-h-screen">
+    <div className="min-h-screen bg-[#f5f5f5] text-black">
 
-      <h1 className="text-2xl font-bold mb-4">
-        Results for "{query}"
-      </h1>
-
-      {/* BUDGET */}
-      <div className="mb-6">
-        <p className="text-sm text-gray-500 mb-1">
-          Max Budget: ₹{budget}
-        </p>
-        <input
-          type="range"
-          min={10000}
-          max={100000}
-          step={5000}
-          value={budget}
-          onChange={(e) => setBudget(Number(e.target.value))}
-          className="w-full"
-        />
+      {/* HEADER */}
+      <div className="p-6">
+        <h1 className="text-2xl font-bold">
+          Results for "{query}"
+        </h1>
       </div>
 
-      {/* RESULTS */}
-      <div className="space-y-4">
+      <div className="flex flex-col md:flex-row gap-6 px-6 pb-10">
 
-        {filtered.length === 0 && (
-          <p className="text-gray-500">
-            No trips found for "{query}"
-          </p>
-        )}
+        {/* FILTER PANEL */}
+        <div className="w-full md:w-[280px] bg-white p-4 rounded-xl shadow">
 
-        {filtered.map((trip) => {
-          const cheapest = Math.min(
-            ...(trip.vendors || []).map((v: any) => v.price)
-          );
+          <h2 className="font-semibold mb-4">Filters</h2>
 
-          return (
-            <Link key={trip.id} href={`/trip/${trip.id}`}>
-              <div className="flex items-center gap-4 p-4 border rounded-xl hover:shadow cursor-pointer">
+          {/* Budget */}
+          <div>
+            <p className="text-sm text-gray-500 mb-1">
+              Max Budget: ₹{budget}
+            </p>
+            <input
+              type="range"
+              min={10000}
+              max={100000}
+              step={5000}
+              value={budget}
+              onChange={(e) => setBudget(Number(e.target.value))}
+              className="w-full"
+            />
+          </div>
 
-                <div className="relative w-24 h-24">
-                  <Image
-                    src={trip.image}
-                    alt={trip.name}
-                    fill
-                    sizes="96px"
-                    className="rounded-lg object-cover"
-                  />
+          {/* Category */}
+          <div className="mt-4">
+            <p className="text-sm text-gray-500 mb-2">Category</p>
+            <div className="flex flex-wrap gap-2">
+              {["Party", "Beach", "Friends"].map((c) => (
+                <button
+                  key={c}
+                  className="px-3 py-1 border rounded-full text-sm"
+                >
+                  {c}
+                </button>
+              ))}
+            </div>
+          </div>
+
+        </div>
+
+        {/* RESULTS */}
+        <div className="flex-1 space-y-4">
+
+          {filtered.length === 0 && (
+            <p className="text-gray-500">
+              No trips found
+            </p>
+          )}
+
+          {filtered.map((trip) => {
+            const cheapest = Math.min(
+              ...(trip.vendors || []).map((v: any) => v.price)
+            );
+
+            return (
+              <Link key={trip.id} href={`/trip/${trip.id}`}>
+                <div className="bg-white rounded-xl shadow hover:shadow-lg transition flex flex-col md:flex-row overflow-hidden">
+
+                  {/* IMAGE */}
+                  <div className="relative w-full md:w-[250px] h-[180px]">
+                    <Image
+                      src={trip.image}
+                      alt={trip.name}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+
+                  {/* INFO */}
+                  <div className="flex-1 p-4 flex flex-col justify-between">
+
+                    <div>
+                      <h2 className="text-lg font-semibold">
+                        {trip.name}
+                      </h2>
+
+                      <p className="text-sm text-gray-500">
+                        {trip.location} • {trip.duration}
+                      </p>
+
+                      {/* TAGS */}
+                      <div className="flex gap-2 mt-2 flex-wrap">
+                        {(trip.category || []).map((c: string) => (
+                          <span
+                            key={c}
+                            className="text-xs bg-gray-100 px-2 py-1 rounded-full"
+                          >
+                            {c}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* FOOTER */}
+                    <div className="flex justify-between items-center mt-4">
+
+                      <p className="text-sm text-gray-500">
+                        Multiple vendors available
+                      </p>
+
+                      <div className="text-right">
+                        <p className="text-lg font-bold text-orange-500">
+                          ₹{cheapest}
+                        </p>
+                        <p className="text-xs text-gray-400">
+                          Starting price
+                        </p>
+                      </div>
+
+                    </div>
+
+                  </div>
+
                 </div>
-
-                <div className="flex-1">
-                  <h2 className="font-semibold">
-                    {trip.name}
-                  </h2>
-                  <p className="text-sm text-gray-500">
-                    {trip.duration}
-                  </p>
-                </div>
-
-                <div className="text-orange-500 font-bold">
-                  ₹{cheapest}
-                </div>
-
-              </div>
-            </Link>
-          );
-        })}
+              </Link>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
