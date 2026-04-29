@@ -37,15 +37,28 @@ export default function Home() {
         <div className="mt-6">
           <input
             type="text"
-            placeholder="Search Destination..."
+            placeholder="Search Destination or Category..."
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 router.push(`/search?q=${e.currentTarget.value}`);
               }
             }}
-            className="w-full p-4 rounded-full border border-gray-300"
+            className="w-full p-4 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500"
           />
         </div>
+      </div>
+
+      {/* CATEGORY PILLS */}
+      <div className="px-6 mt-6 flex gap-2 overflow-x-auto">
+        {["Women", "LGBTQ", "Corporate", "Friends"].map((cat) => (
+          <button
+            key={cat}
+            onClick={() => router.push(`/search?q=${cat}`)}
+            className="px-4 py-2 bg-white border rounded-full text-sm shadow"
+          >
+            {cat}
+          </button>
+        ))}
       </div>
 
       {/* CATEGORY SECTIONS */}
@@ -57,25 +70,34 @@ export default function Home() {
         return (
           <div key={cat} className="px-6 mt-10">
 
-            <h2 className="font-semibold text-lg mb-4">
-              {cat.toUpperCase()} TRIPS
-            </h2>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="font-semibold text-lg">
+                {cat.toUpperCase()} TRIPS
+              </h2>
 
-            <div className="flex gap-4 overflow-x-auto">
+              <button
+                onClick={() => router.push(`/search?q=${cat}`)}
+                className="text-orange-500 text-sm"
+              >
+                See all →
+              </button>
+            </div>
+
+            <div className="flex gap-4 overflow-x-auto pb-2">
               {filtered.map((trip) => (
                 <Link key={trip.id} href={`/trip/${trip.id}`}>
-                  <div className="relative min-w-[140px] h-[180px] rounded-xl overflow-hidden">
+                  <div className="relative min-w-[160px] h-[200px] rounded-xl overflow-hidden shadow">
 
-                    {trip.image && (
-                      <Image
-                        src={trip.image}
-                        alt={trip.name}
-                        fill
-                        className="object-cover"
-                      />
-                    )}
+                    <Image
+                      src={trip.image}
+                      alt={trip.name}
+                      fill
+                      priority
+                      sizes="(max-width:768px) 100vw, 200px"
+                      className="object-cover"
+                    />
 
-                    <div className="absolute bottom-2 left-2 text-white text-sm font-semibold">
+                    <div className="absolute bottom-0 left-0 right-0 bg-black/40 text-white text-sm p-2">
                       {trip.name}
                     </div>
 
