@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import Image from "next/image";
-import Link from "next/link";
+import TripCard from "@/components/TripCard";
 
 export default function SearchPage() {
   const searchParams = useSearchParams();
@@ -40,38 +39,36 @@ export default function SearchPage() {
     <div className="min-h-screen bg-[#f5f5f5] text-black">
 
       {/* HEADER */}
-      <div className="p-6">
-        <h1 className="text-2xl font-bold">
+      <div className="p-4 md:p-6">
+        <h1 className="text-xl md:text-2xl font-bold">
           Results for "{query}"
         </h1>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-6 px-6 pb-10">
+      <div className="flex flex-col md:flex-row gap-4 md:gap-6 px-4 md:px-6 pb-10">
 
-        {/* FILTER PANEL */}
+        {/* FILTER */}
         <div className="w-full md:w-[280px] bg-white p-4 rounded-xl shadow">
 
           <h2 className="font-semibold mb-4">Filters</h2>
 
-          {/* Budget */}
-          <div>
-            <p className="text-sm text-gray-500 mb-1">
-              Max Budget: ₹{budget}
-            </p>
-            <input
-              type="range"
-              min={10000}
-              max={100000}
-              step={5000}
-              value={budget}
-              onChange={(e) => setBudget(Number(e.target.value))}
-              className="w-full"
-            />
-          </div>
+          <p className="text-sm text-gray-500 mb-1">
+            Max Budget: ₹{budget}
+          </p>
 
-          {/* Category */}
+          <input
+            type="range"
+            min={10000}
+            max={100000}
+            step={5000}
+            value={budget}
+            onChange={(e) => setBudget(Number(e.target.value))}
+            className="w-full"
+          />
+
           <div className="mt-4">
             <p className="text-sm text-gray-500 mb-2">Category</p>
+
             <div className="flex flex-wrap gap-2">
               {["Party", "Beach", "Friends"].map((c) => (
                 <button
@@ -87,82 +84,16 @@ export default function SearchPage() {
         </div>
 
         {/* RESULTS */}
-        <div className="flex-1 space-y-4">
+        <div className="flex-1 space-y-4 md:space-y-6 max-w-4xl">
 
           {filtered.length === 0 && (
-            <p className="text-gray-500">
-              No trips found
-            </p>
+            <p className="text-gray-500">No trips found</p>
           )}
 
-          {filtered.map((trip) => {
-            const cheapest = Math.min(
-              ...(trip.vendors || []).map((v: any) => v.price)
-            );
+          {filtered.map((trip) => (
+            <TripCard key={trip.id} trip={trip} />
+          ))}
 
-            return (
-              <Link key={trip.id} href={`/trip/${trip.id}`}>
-                <div className="bg-white rounded-xl shadow hover:shadow-lg transition flex flex-col md:flex-row overflow-hidden">
-
-                  {/* IMAGE */}
-                  <div className="relative w-full md:w-[250px] h-[180px]">
-                    <Image
-                      src={trip.image}
-                      alt={trip.name}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-
-                  {/* INFO */}
-                  <div className="flex-1 p-4 flex flex-col justify-between">
-
-                    <div>
-                      <h2 className="text-lg font-semibold">
-                        {trip.name}
-                      </h2>
-
-                      <p className="text-sm text-gray-500">
-                        {trip.location} • {trip.duration}
-                      </p>
-
-                      {/* TAGS */}
-                      <div className="flex gap-2 mt-2 flex-wrap">
-                        {(trip.category || []).map((c: string) => (
-                          <span
-                            key={c}
-                            className="text-xs bg-gray-100 px-2 py-1 rounded-full"
-                          >
-                            {c}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* FOOTER */}
-                    <div className="flex justify-between items-center mt-4">
-
-                      <p className="text-sm text-gray-500">
-                        Multiple vendors available
-                      </p>
-
-                      <div className="text-right">
-                        <p className="text-lg font-bold text-orange-500">
-                          ₹{cheapest}
-                        </p>
-                        <p className="text-xs text-gray-400">
-                          Starting price
-                        </p>
-                      </div>
-
-                    </div>
-
-                  </div>
-
-                </div>
-              </Link>
-            );
-          })}
         </div>
       </div>
     </div>
