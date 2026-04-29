@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function SearchPage() {
   const searchParams = useSearchParams();
@@ -26,44 +27,81 @@ export default function SearchPage() {
       )
   );
 
+  // budget filter
+  filtered = filtered.filter((trip) => {
+    const minPrice = Math.min(...trip.vendors.map((v: any) => v.price));
+    return minPrice <= budget;
+  });
+
   return (
     <div className="p-6 bg-white min-h-screen">
 
-      <h1 className="text-xl font-bold mb-4">
+      {/* TITLE */}
+      <h1 className="text-2xl font-bold mb-4">
         Results for "{query}"
       </h1>
 
       {/* BUDGET */}
-      <input
-        type="range"
-        min={10000}
-        max={100000}
-        value={budget}
-        onChange={(e) => setBudget(Number(e.target.value))}
-        className="w-full mb-6"
-      />
+      <div className="mb-6">
+        <p className="text-sm text-gray-500 mb-1">
+          Max Budget: ₹{budget}
+        </p>
+        <input
+          type="range"
+          min={10000}
+          max={100000}
+          step={5000}
+          value={budget}
+          onChange={(e) => setBudget(Number(e.target.value))}
+          className="w-full"
+        />
+      </div>
 
       {/* RESULTS */}
       <div className="space-y-4">
-        {filtered.map((trip) => (
-          <Link key={trip.id} href={`/trip/${trip.id}`}>
-            <div className="flex gap-4 p-4 border rounded-xl">
 
-              <img
-                src={trip.image}
-                className="w-24 h-24 rounded-lg object-cover"
-              />
+        {filtered.length === 0 && (
+          <p className="text-gray-500">
+            No trips found for "{query}"
+          </p>
+        )}
 
-              <div className="flex-1">
-                <h2>{trip.name}</h2>
-                <p className="text-sm text-gray-500">
-                  {trip.duration}
-                </p>
+        {filtered.map((trip) => {
+          const cheapest = Math.min(
+            ...trip.vendors.map((v: any) => v.price)
+          );
+
+          return (
+            <Link key={trip.id} href={`/trip/${trip.id}`}>
+              <div className="flex items-center gap-4 p-4 border rounded-xl hover:shadow">
+
+                <div className="relative w-24 h-24">
+                  <Image
+                    src={trip.image}
+                    alt={trip.name}
+                    fill
+                    sizes="96px"
+                    className="rounded-lg object-cover"
+                  />
+                </div>
+
+                <div className="flex-1">
+                  <h2 className="font-semibold">
+                    {trip.name}
+                  </h2>
+                  <p className="text-sm text-gray-500">
+                    {trip.duration}
+                  </p>
+                </div>
+
+                <div className="text-orange-500 font-bold">
+                  ₹{cheapest}
+                </div>
+
               </div>
-
-            </div>
-          </Link>
-        ))}
+            </Link>
+          );
+        })}
       </div>
 
     </div>
