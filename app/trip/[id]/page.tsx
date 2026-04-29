@@ -1,8 +1,10 @@
 import { trips } from "@/data/trips";
 import Image from "next/image";
 
-export default function TripDetail({ params }: any) {
-  const trip = trips.find((t) => t.id === params.id);
+export default async function TripDetail({ params }: any) {
+  const { id } = await params;
+
+  const trip = trips.find((t) => t.id === id);
 
   if (!trip) return <div className="p-6">Trip not found</div>;
 
@@ -19,19 +21,18 @@ export default function TripDetail({ params }: any) {
       </div>
 
       <div className="p-6">
-
         <h1 className="text-2xl font-bold">{trip.name}</h1>
 
-        <div className="mt-6">
+        <div className="mt-6 space-y-3">
           {trip.vendors.map((v) => (
-            <div key={v.id} className="flex justify-between border p-4 rounded mb-2">
+            <div key={v.id} className="flex justify-between border p-4 rounded-xl">
               <span>{v.name}</span>
-              <span>₹{v.price}</span>
+              <span className="font-bold">₹{v.price}</span>
             </div>
           ))}
         </div>
-
       </div>
+
     </div>
   );
 }
