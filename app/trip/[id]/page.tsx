@@ -19,10 +19,10 @@ export default async function TripDetail({
   );
 
   return (
-    <div className="bg-[#f5f5f5] min-h-screen">
+    <div className="bg-[#f3f4f6] min-h-screen">
 
-      {/* HERO IMAGE */}
-      <div className="relative w-full h-[220px] md:h-[350px]">
+      {/* HERO */}
+      <div className="relative w-full h-[240px] md:h-[380px]">
         <Image
           src={trip.image}
           alt={trip.name}
@@ -31,32 +31,38 @@ export default async function TripDetail({
           className="object-cover"
         />
 
-        <div className="absolute bottom-4 left-4 text-white">
-          <h1 className="text-xl md:text-3xl font-bold">
+        {/* DARK OVERLAY */}
+        <div className="absolute inset-0 bg-black/30" />
+
+        <div className="absolute bottom-6 left-6 text-white">
+          <h1 className="text-2xl md:text-4xl font-bold">
             {trip.name}
           </h1>
+          <p className="text-sm opacity-90 mt-1">
+            {trip.location} • {trip.duration}
+          </p>
         </div>
       </div>
 
-      {/* CONTENT */}
-      <div className="flex flex-col md:flex-row gap-6 px-4 md:px-6 py-6 max-w-6xl mx-auto">
+      {/* MAIN */}
+      <div className="max-w-6xl mx-auto px-4 md:px-6 py-6 flex flex-col md:flex-row gap-6">
 
-        {/* LEFT SIDE */}
-        <div className="flex-1 space-y-4">
+        {/* LEFT */}
+        <div className="flex-1 space-y-5">
 
           {/* ABOUT */}
-          <div className="bg-white p-4 rounded-xl shadow">
-            <h2 className="font-semibold mb-2">About Trip</h2>
+          <div className="bg-white p-5 rounded-2xl shadow-sm">
+            <h2 className="font-semibold mb-2 text-lg">About Trip</h2>
             <p className="text-gray-600 text-sm">
               {trip.description || "No description available."}
             </p>
           </div>
 
           {/* DETAILS */}
-          <div className="bg-white p-4 rounded-xl shadow">
-            <h2 className="font-semibold mb-3">Trip Details</h2>
+          <div className="bg-white p-5 rounded-2xl shadow-sm">
+            <h2 className="font-semibold mb-3 text-lg">Trip Details</h2>
 
-            <div className="grid grid-cols-2 gap-3 text-sm">
+            <div className="grid grid-cols-2 gap-4 text-sm">
 
               <p><span className="font-medium">Location:</span> {trip.location}</p>
               <p><span className="font-medium">Duration:</span> {trip.duration}</p>
@@ -68,8 +74,8 @@ export default async function TripDetail({
           </div>
 
           {/* HIGHLIGHTS */}
-          <div className="bg-white p-4 rounded-xl shadow">
-            <h2 className="font-semibold mb-2">Highlights</h2>
+          <div className="bg-white p-5 rounded-2xl shadow-sm">
+            <h2 className="font-semibold mb-2 text-lg">Highlights</h2>
 
             <ul className="list-disc ml-5 text-sm text-gray-600 space-y-1">
               <li>Beautiful locations</li>
@@ -81,14 +87,14 @@ export default async function TripDetail({
 
         </div>
 
-        {/* RIGHT SIDE (PRICE BOX) */}
-        <div className="md:w-[300px]">
+        {/* RIGHT */}
+        <div className="md:w-[320px]">
 
-          <div className="bg-white p-4 rounded-xl shadow md:sticky md:top-6">
+          <div className="bg-white p-5 rounded-2xl shadow-md md:sticky md:top-6">
 
             <p className="text-sm text-gray-500">Starting from</p>
 
-            <h2 className="text-2xl font-bold text-orange-500">
+            <h2 className="text-3xl font-bold text-orange-500">
               ₹{cheapest}
             </h2>
 
@@ -96,11 +102,11 @@ export default async function TripDetail({
               ⭐ 4.5
             </div>
 
-            <button className="w-full mt-4 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
+            <button className="w-full mt-5 bg-blue-600 text-white py-3 rounded-xl text-sm font-medium hover:bg-blue-700 transition">
               Book Now
             </button>
 
-            <button className="w-full mt-2 border py-2 rounded-lg">
+            <button className="w-full mt-3 border py-3 rounded-xl text-sm hover:bg-gray-50 transition">
               Add to Compare
             </button>
 
