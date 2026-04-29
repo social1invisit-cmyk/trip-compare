@@ -1,82 +1,105 @@
 import { trips } from "@/data/trips";
 import Image from "next/image";
 
-export default async function TripDetail({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params; // ✅ FIX
+export default function TripDetail({ params }: { params: { id: string } }) {
+  const trip = trips.find((t) => t.id === params.id);
 
-  const trip = trips.find((t) => t.id === id);
+  if (!trip) {
+    return <div className="p-6">Trip not found</div>;
+  }
 
-  if (!trip) return <div className="p-6">Trip not found</div>;
-
-  const cheapest = trip.vendors.reduce((min, v) =>
-    v.price < min.price ? v : min
+  const cheapest = Math.min(
+    ...(trip.vendors || []).map((v: any) => v.price)
   );
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="bg-[#f5f5f5] min-h-screen">
 
-      {/* HERO */}
-      <div className="relative h-[300px] w-full">
+      {/* HERO IMAGE */}
+      <div className="relative w-full h-[220px] md:h-[350px]">
         <Image
           src={trip.image}
           alt={trip.name}
           fill
           priority
-          loading="eager"
-          sizes="100vw"
           className="object-cover"
         />
+
+        <div className="absolute bottom-4 left-4 text-white">
+          <h1 className="text-xl md:text-3xl font-bold">
+            {trip.name}
+          </h1>
+        </div>
       </div>
 
-      <div className="p-6">
+      {/* CONTENT */}
+      <div className="flex flex-col md:flex-row gap-6 px-4 md:px-6 py-6 max-w-6xl mx-auto">
 
-        <h1 className="text-2xl font-bold">{trip.name}</h1>
+        {/* LEFT SIDE */}
+        <div className="flex-1 space-y-4">
 
-        <p className="text-gray-500 mt-1">
-          {trip.duration} • {trip.location}
-        </p>
-
-        {/* BEST DEAL */}
-        <div className="mt-6 p-4 bg-green-100 rounded-xl flex justify-between items-center">
-          <div>
-            <p className="text-sm text-gray-600">Best Price</p>
-            <p className="text-lg font-bold">₹{cheapest.price}</p>
+          {/* ABOUT */}
+          <div className="bg-white p-4 rounded-xl shadow">
+            <h2 className="font-semibold mb-2">About Trip</h2>
+            <p className="text-gray-600 text-sm">
+              {trip.description || "No description available."}
+            </p>
           </div>
-          <span className="text-green-700 font-semibold">
-            {cheapest.name}
-          </span>
+
+          {/* DETAILS */}
+          <div className="bg-white p-4 rounded-xl shadow">
+            <h2 className="font-semibold mb-3">Trip Details</h2>
+
+            <div className="grid grid-cols-2 gap-3 text-sm">
+
+              <p><span className="font-medium">Location:</span> {trip.location}</p>
+              <p><span className="font-medium">Duration:</span> {trip.duration}</p>
+
+              <p><span className="font-medium">Category:</span> {trip.category?.join(", ")}</p>
+              <p><span className="font-medium">Group Size:</span> 10-20</p>
+
+            </div>
+          </div>
+
+          {/* HIGHLIGHTS */}
+          <div className="bg-white p-4 rounded-xl shadow">
+            <h2 className="font-semibold mb-2">Highlights</h2>
+
+            <ul className="list-disc ml-5 text-sm text-gray-600 space-y-1">
+              <li>Beautiful locations</li>
+              <li>Group experience</li>
+              <li>Local culture & food</li>
+              <li>Adventure activities</li>
+            </ul>
+          </div>
+
         </div>
 
-        {/* VENDORS */}
-        <div className="mt-6 space-y-3">
-          {trip.vendors.map((v) => (
-            <div
-              key={v.id}
-              className={`flex justify-between items-center border p-4 rounded-xl ${
-                v.price === cheapest.price
-                  ? "border-green-500 bg-green-50"
-                  : ""
-              }`}
-            >
-              <div>
-                <p className="font-semibold">{v.name}</p>
-                <p className="text-sm text-gray-500">
-                  ⭐ {v.rating}
-                </p>
-              </div>
+        {/* RIGHT SIDE (PRICE BOX) */}
+        <div className="md:w-[300px]">
 
-              <div className="text-right">
-                <p className="font-bold text-lg">₹{v.price}</p>
-                <button className="text-sm text-orange-500">
-                  View Deal →
-                </button>
-              </div>
+          <div className="bg-white p-4 rounded-xl shadow md:sticky md:top-6">
+
+            <p className="text-sm text-gray-500">Starting from</p>
+
+            <h2 className="text-2xl font-bold text-orange-500">
+              ₹{cheapest}
+            </h2>
+
+            <div className="mt-2 text-sm">
+              ⭐ 4.5
             </div>
-          ))}
+
+            <button className="w-full mt-4 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
+              Book Now
+            </button>
+
+            <button className="w-full mt-2 border py-2 rounded-lg">
+              Add to Compare
+            </button>
+
+          </div>
+
         </div>
 
       </div>
