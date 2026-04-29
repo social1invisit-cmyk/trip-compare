@@ -12,7 +12,8 @@ export default function Home() {
   useEffect(() => {
     fetch("/api/trips")
       .then((res) => res.json())
-      .then((data) => setTrips(data));
+      .then((data) => setTrips(data))
+      .catch(() => setTrips([]));
   }, []);
 
   const categories = ["Party", "Beach"];
@@ -42,8 +43,8 @@ export default function Home() {
         <input
           placeholder="Search destination or category..."
           onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              router.push(`/search?q=${e.currentTarget.value}`);
+            if (e.key === "Enter" && e.currentTarget.value.trim()) {
+              router.push(`/search?q=${encodeURIComponent(e.currentTarget.value)}`);
             }
           }}
           className="mt-6 w-full p-4 rounded-full border"
@@ -66,7 +67,7 @@ export default function Home() {
       {/* SECTIONS */}
       {categories.map((cat) => {
         const filtered = trips.filter((t) =>
-          t.category.includes(cat)
+          (t.category || []).includes(cat)
         );
 
         return (
@@ -92,7 +93,6 @@ export default function Home() {
                       src={trip.image}
                       alt={trip.name}
                       fill
-                      priority
                       sizes="200px"
                       className="object-cover"
                     />

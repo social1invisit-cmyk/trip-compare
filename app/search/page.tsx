@@ -7,7 +7,7 @@ import Image from "next/image";
 
 export default function SearchPage() {
   const searchParams = useSearchParams();
-  const query = searchParams.get("q")?.toLowerCase() || "";
+  const query = (searchParams.get("q") || "").toLowerCase();
 
   const [trips, setTrips] = useState<any[]>([]);
   const [budget, setBudget] = useState(100000);
@@ -15,28 +15,30 @@ export default function SearchPage() {
   useEffect(() => {
     fetch("/api/trips")
       .then((res) => res.json())
-      .then((data) => setTrips(data));
+      .then((data) => setTrips(data))
+      .catch(() => setTrips([]));
   }, []);
 
-  let filtered = trips.filter(
-    (t) =>
-      t.name.toLowerCase().includes(query) ||
-      t.location.toLowerCase().includes(query) ||
-      t.category.some((c: string) =>
-        c.toLowerCase().includes(query)
-      )
+  if (!trips.length) {
+    return <div className="p-6">Loading trips...</div>;
+  }
+
+  let filtered = trips.filter((t) =>
+    (t.name || "").toLowerCase().includes(query) ||
+    (t.location || "").toLowerCase().includes(query) ||
+    (t.category || []).some((c: string) =>
+      c.toLowerCase().includes(query)
+    )
   );
 
-  // budget filter
   filtered = filtered.filter((trip) => {
-    const minPrice = Math.min(...trip.vendors.map((v: any) => v.price));
+    const minPrice = Math.min(...(trip.vendors || []).map((v: any) => v.price));
     return minPrice <= budget;
   });
 
   return (
     <div className="p-6 bg-white min-h-screen">
 
-      {/* TITLE */}
       <h1 className="text-2xl font-bold mb-4">
         Results for "{query}"
       </h1>
@@ -68,12 +70,12 @@ export default function SearchPage() {
 
         {filtered.map((trip) => {
           const cheapest = Math.min(
-            ...trip.vendors.map((v: any) => v.price)
+            ...(trip.vendors || []).map((v: any) => v.price)
           );
 
           return (
             <Link key={trip.id} href={`/trip/${trip.id}`}>
-              <div className="flex items-center gap-4 p-4 border rounded-xl hover:shadow">
+              <div className="flex items-center gap-4 p-4 border rounded-xl hover:shadow cursor-pointer">
 
                 <div className="relative w-24 h-24">
                   <Image
@@ -103,7 +105,6 @@ export default function SearchPage() {
           );
         })}
       </div>
-
     </div>
   );
 }

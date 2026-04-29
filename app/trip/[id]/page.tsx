@@ -1,8 +1,12 @@
 import { trips } from "@/data/trips";
 import Image from "next/image";
 
-export default async function TripDetail({ params }: any) {
-  const { id } = await params;
+export default async function TripDetail({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params; // ✅ FIX
 
   const trip = trips.find((t) => t.id === id);
 
@@ -15,13 +19,14 @@ export default async function TripDetail({ params }: any) {
   return (
     <div className="min-h-screen bg-white">
 
-      {/* HERO IMAGE */}
+      {/* HERO */}
       <div className="relative h-[300px] w-full">
         <Image
           src={trip.image}
           alt={trip.name}
           fill
           priority
+          loading="eager"
           sizes="100vw"
           className="object-cover"
         />
@@ -29,7 +34,6 @@ export default async function TripDetail({ params }: any) {
 
       <div className="p-6">
 
-        {/* TITLE */}
         <h1 className="text-2xl font-bold">{trip.name}</h1>
 
         <p className="text-gray-500 mt-1">
@@ -47,7 +51,7 @@ export default async function TripDetail({ params }: any) {
           </span>
         </div>
 
-        {/* ALL VENDORS */}
+        {/* VENDORS */}
         <div className="mt-6 space-y-3">
           {trip.vendors.map((v) => (
             <div
@@ -76,7 +80,6 @@ export default async function TripDetail({ params }: any) {
         </div>
 
       </div>
-
     </div>
   );
 }
