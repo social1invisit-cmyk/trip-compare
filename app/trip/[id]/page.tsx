@@ -32,7 +32,7 @@ export default async function TripDetail({
         />
 
         {/* DARK OVERLAY */}
-        <div className="absolute inset-0 bg-black/30" />
+        <div className="absolute inset-0 bg-black/40" />
 
         <div className="absolute bottom-6 left-6 text-white">
           <h1 className="text-2xl md:text-4xl font-bold">
@@ -51,7 +51,7 @@ export default async function TripDetail({
         <div className="flex-1 space-y-5">
 
           {/* ABOUT */}
-          <div className="bg-white p-5 rounded-2xl shadow-sm">
+          <div className="bg-white p-5 rounded-2xl shadow border">
             <h2 className="font-semibold mb-2 text-lg">About Trip</h2>
             <p className="text-gray-600 text-sm">
               {trip.description || "No description available."}
@@ -59,7 +59,7 @@ export default async function TripDetail({
           </div>
 
           {/* DETAILS */}
-          <div className="bg-white p-5 rounded-2xl shadow-sm">
+          <div className="bg-white p-5 rounded-2xl shadow border">
             <h2 className="font-semibold mb-3 text-lg">Trip Details</h2>
 
             <div className="grid grid-cols-2 gap-4 text-sm">
@@ -74,7 +74,7 @@ export default async function TripDetail({
           </div>
 
           {/* HIGHLIGHTS */}
-          <div className="bg-white p-5 rounded-2xl shadow-sm">
+          <div className="bg-white p-5 rounded-2xl shadow border">
             <h2 className="font-semibold mb-2 text-lg">Highlights</h2>
 
             <ul className="list-disc ml-5 text-sm text-gray-600 space-y-1">
@@ -90,7 +90,7 @@ export default async function TripDetail({
         {/* RIGHT */}
         <div className="md:w-[320px]">
 
-          <div className="bg-white p-5 rounded-2xl shadow-md md:sticky md:top-6">
+          <div className="bg-white p-5 rounded-2xl shadow-lg border md:sticky md:top-6">
 
             <p className="text-sm text-gray-500">Starting from</p>
 
@@ -102,7 +102,7 @@ export default async function TripDetail({
               ⭐ 4.5
             </div>
 
-            <button className="w-full mt-5 bg-blue-600 text-white py-3 rounded-xl text-sm font-medium hover:bg-blue-700 transition">
+            <button className="w-full mt-5 bg-blue-600 text-white py-3 rounded-xl text-sm font-semibold shadow hover:bg-blue-700 transition">
               Book Now
             </button>
 
